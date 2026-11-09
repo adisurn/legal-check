@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;450;500;550;600;650;700&family=Manrope:wght@400;500;600;650;700;750;800&display=swap");
 @import "tailwindcss";
+@import "./components/layout/device-workspace.css";
 
 :root {
   font-family: "Manrope", "IBM Plex Sans Thai", sans-serif;
@@ -77,12 +78,14 @@ button:hover:not(:disabled) {
   filter: brightness(0.98);
 }
 .app-shell {
-  min-height: 100vh;
+  height: 100%;
+  min-height: 0;
+  display: flex;
 }
 .sidebar {
   width: 238px;
-  position: fixed;
-  inset: 0 auto 0 0;
+  position: relative;
+  flex-shrink: 0;
   background: white;
   border-right: 1px solid var(--border);
   z-index: 30;
@@ -248,10 +251,15 @@ button:hover:not(:disabled) {
   border-radius: 50%;
 }
 .main-shell {
-  margin-left: 238px;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 .topbar {
   height: 76px;
+  flex-shrink: 0;
   background: #fff;
   border-bottom: 1px solid var(--border);
   padding: 0 37px;
@@ -265,6 +273,15 @@ button:hover:not(:disabled) {
   gap: 15px;
   font-size: 11px;
   color: #959aaa;
+}
+.breadcrumb-trail {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.mobile-wordmark,
+.mobile-navigation {
+  display: none;
 }
 .breadcrumb strong {
   font-weight: 500;
@@ -328,10 +345,18 @@ button:hover:not(:disabled) {
 .mobile-toggle {
   display: none;
 }
+.sidebar-overlay {
+  display: none;
+}
 main {
   padding: 31px 37px 0;
   max-width: 1510px;
   margin: auto;
+  width: 100%;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ccd5e7 transparent;
 }
 .page-heading {
   display: flex;
@@ -1288,15 +1313,9 @@ select:focus {
   border-radius: 6px;
   margin-bottom: 20px;
 }
-@media (min-width: 1500px) {
-  :root {
-    font-size: 14px;
-  }
+@container app (min-width: 1500px) {
   .sidebar {
     width: 254px;
-  }
-  .main-shell {
-    margin-left: 254px;
   }
   main {
     padding: 36px 46px 0;
@@ -1352,14 +1371,11 @@ select:focus {
     font-size: 10px;
   }
 }
-@media (max-width: 1150px) {
+@container app (max-width: 1150px) {
   .sidebar {
     width: 210px;
     padding-left: 13px;
     padding-right: 13px;
-  }
-  .main-shell {
-    margin-left: 210px;
   }
   .brand {
     font-size: 22px;
@@ -1450,12 +1466,9 @@ select:focus {
     font-size: 13px;
   }
 }
-@media (max-width: 900px) {
+@container app (max-width: 900px) {
   .sidebar {
     width: 190px;
-  }
-  .main-shell {
-    margin-left: 190px;
   }
   .brand {
     font-size: 20px;
@@ -1599,8 +1612,14 @@ select:focus {
     gap: 4px;
   }
 }
-@media (max-width: 680px) {
+@container app (max-width: 680px) {
+  .app-shell {
+    flex-direction: column;
+  }
   .sidebar {
+    position: absolute;
+    inset: 0 auto 0 0;
+    visibility: hidden;
     transform: translateX(-100%);
     transition: transform 0.25s;
     width: 238px;
@@ -1609,6 +1628,7 @@ select:focus {
   }
   .sidebar.mobile-open {
     transform: translateX(0);
+    visibility: visible;
   }
   .brand {
     font-size: 24px;
@@ -1625,7 +1645,8 @@ select:focus {
     left: -19px;
   }
   .sidebar-overlay {
-    position: fixed;
+    display: block;
+    position: absolute;
     inset: 0;
     background: #17233d66;
     backdrop-filter: blur(2px);
@@ -1641,9 +1662,62 @@ select:focus {
   .mobile-toggle {
     display: inline-flex;
   }
+  .icon-button {
+    width: 44px;
+    height: 44px;
+  }
   .breadcrumb {
     gap: 9px;
     font-size: 10px;
+  }
+  .breadcrumb-trail {
+    display: none;
+  }
+  .mobile-wordmark {
+    display: block;
+    color: #334d91;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -0.8px;
+  }
+  .mobile-wordmark > span {
+    font-weight: 500;
+  }
+  .mobile-navigation {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    flex-shrink: 0;
+    padding: 7px 5px 3px;
+    background: white;
+    border-top: 1px solid #e7ecf5;
+    box-shadow: 0 -4px 18px #344a7610;
+    z-index: 10;
+  }
+  .mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-height: 51px;
+    color: #98a2b5;
+    font-size: 9px;
+    font-weight: 500;
+    border-radius: 8px;
+  }
+  .mobile-nav-item > span {
+    display: grid;
+    place-items: center;
+    width: 41px;
+    height: 28px;
+    border-radius: 9px;
+  }
+  .mobile-nav-item.active {
+    color: #4461ad;
+    font-weight: 650;
+  }
+  .mobile-nav-item.active > span {
+    background: #eaf0fc;
   }
   .header-actions {
     gap: 10px;
@@ -1659,14 +1733,16 @@ select:focus {
     width: 18px;
   }
   main {
-    padding: 24px 18px 0;
+    padding: 22px 18px 0;
+    overscroll-behavior-y: contain;
   }
   .eyebrow {
     font-size: 8px;
     letter-spacing: 1.5px;
   }
   .page-heading {
-    gap: 8px;
+    flex-wrap: wrap;
+    gap: 15px;
     margin-bottom: 21px;
     align-items: flex-start;
   }
@@ -1674,15 +1750,17 @@ select:focus {
     font-size: 21px;
   }
   .page-heading p {
-    font-size: 10px;
-    max-width: 245px;
+    font-size: 12px;
+    max-width: none;
     margin-top: 7px;
   }
   .new-case {
-    font-size: 9px;
-    padding: 9px 10px;
-    gap: 4px;
-    margin-top: 21px;
+    font-size: 12px;
+    min-height: 44px;
+    padding: 11px 16px;
+    gap: 7px;
+    margin-top: 0;
+    width: 100%;
   }
   .new-case svg {
     width: 14px;
@@ -1707,7 +1785,7 @@ select:focus {
     font-size: 8px;
   }
   .hero p {
-    font-size: 10px;
+    font-size: 12px;
     max-width: 300px;
   }
   .desktop-break {
@@ -1761,6 +1839,9 @@ select:focus {
     font-size: 14px;
     gap: 7px;
   }
+  .section-heading {
+    flex-wrap: wrap;
+  }
   .section-subtitle {
     font-size: 8px;
   }
@@ -1786,6 +1867,8 @@ select:focus {
   .tool-card h3 {
     font-size: 13px;
     letter-spacing: -0.5px;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
   .tool-card h4 {
     font-size: 9px;
@@ -1846,14 +1929,76 @@ select:focus {
     font-size: 9px;
     gap: 5px;
   }
-  .table-scroll table {
-    min-width: 670px;
+  .table-scroll table,
+  .table-scroll tbody {
+    display: block;
+    min-width: 0;
+    white-space: normal;
+  }
+  .table-scroll thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .table-scroll tr {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 12px 8px;
+    border-bottom: 1px solid var(--border);
+    padding: 17px 15px;
+  }
+  .table-scroll tr:last-child {
+    border-bottom: 0;
+  }
+  .table-scroll td {
+    display: block;
+    border: 0;
+    padding: 0;
+    font-size: 10px;
+    min-width: 0;
+    width: auto;
+  }
+  .table-scroll td:first-child {
+    grid-column: 1 / -1;
+  }
+  .table-scroll td:nth-child(3) {
+    justify-self: end;
+  }
+  .table-scroll td:nth-child(4) {
+    grid-column: 1 / -1;
+    font-size: 9px;
+    color: #a0a9b9;
+  }
+  .table-scroll td:nth-child(4):before {
+    content: "อัปเดตล่าสุด · ";
+  }
+  .table-scroll td:last-child {
+    display: none;
+  }
+  .case-name {
+    align-items: flex-start;
+  }
+  .case-name > div {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .case-icon {
+    flex-shrink: 0;
+  }
+  .table-scroll .status {
+    font-size: 9px;
   }
   .sample-label {
     font-size: 7px;
   }
   .case-title {
-    font-size: 10px;
+    font-size: 12px;
+    line-height: 1.8;
   }
   .case-name small {
     font-size: 8px;
@@ -1899,6 +2044,15 @@ select:focus {
   }
   .legal-actions > button {
     width: 100%;
+    min-height: 44px;
+    font-size: 12px;
+  }
+  .legal-panel textarea,
+  .claim-form input,
+  .claim-form select,
+  .modal-body > select,
+  .search-field input {
+    font-size: 16px;
   }
   .privacy-note {
     font-size: 9px;
@@ -1942,11 +2096,13 @@ select:focus {
     width: 35px;
   }
   .search-field {
-    padding: 7px;
+    flex: 1 0 100%;
+    padding: 10px 12px;
   }
   .search-field input {
-    width: 110px;
-    font-size: 8px;
+    width: 100%;
+    min-width: 0;
+    font-size: 16px;
   }
   .modal-heading {
     padding: 17px;
@@ -1962,8 +2118,33 @@ select:focus {
     max-width: 90vw;
     font-size: 11px;
     padding: 13px 18px;
+    bottom: 80px;
   }
   .article-body {
     font-size: 12px;
+  }
+}
+@container app (max-width: 340px) {
+  .tools-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero {
+    padding: 20px 16px;
+  }
+  .hero h2 {
+    font-size: 24px;
+  }
+  .hero-actions,
+  .section-heading {
+    flex-wrap: wrap;
+  }
+  .business-stats {
+    grid-template-columns: 1fr;
+  }
+  .article-card {
+    grid-template-columns: 85px 1fr;
+  }
+  footer {
+    flex-direction: column;
   }
 }

@@ -1,5 +1,38 @@
 Welcome to your new TanStack Start app!
 
+## Project structure
+
+- `src/routes/index.tsx` composes the workspace views and owns shared state:
+  cases, group memberships, search, the legal-check draft, and active dialogs.
+- `src/components/` contains reusable UI (`Icon`, `Modal`, `StatCard`,
+  `ViewLink`, and `Toast`) and feature folders: `layout`, `dashboard`, `cases`,
+  `legal`, `connect`, `business`, and `resources`.
+- `src/data/legal-check.ts` holds sample cases, navigation, tool descriptions,
+  and article content.
+- `src/types/legal-check.ts` defines the shared case, article, and draft types.
+- `src/hooks/use-local.ts` handles Local Storage persistence. Its existing keys
+  and stored data format are unchanged.
+- `src/styles.css` remains the shared stylesheet.
+
+## Display modes
+
+On entry, visitors choose Desktop or Mobile; the toolbar can switch between them
+without resetting the current view, legal-check draft, or saved cases. The choice
+is intentionally per visit (a reload shows the chooser again).
+
+`DeviceWorkspace` owns the presentation only. Mobile uses a scrollable phone
+frame, persistent bottom navigation, and stacked case cards. Desktop retains the
+wide workspace (horizontally scrollable if explicitly chosen on a small device).
+Both modes render the same components and share the existing Local Storage keys.
+App breakpoints use the named `app` CSS container, not the browser width, so the
+phone layout works inside its frame on a desktop too. The chooser and phone-frame
+styles live in `src/components/layout/device-workspace.css`.
+
+Feature components receive data and action callbacks rather than importing the
+route or accessing Local Storage directly. Keep state that must survive switching
+views, such as the legal-check draft, in the route; keep UI-only state, such as the
+mobile menu, with the component that uses it.
+
 # Getting Started
 
 To run this application:
