@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-09T17:25:18Z",
+  "title": "Design System: Legal Check",
+  "extensions": {
+    "shadows": [
+      {
+        "name": "dialog",
+        "value": "0 18px 70px #101e3b35",
+        "purpose": "Focused complaint inspection."
+      },
+      {
+        "name": "toast",
+        "value": "0 6px 24px #1525422b",
+        "purpose": "Temporary saved-state feedback."
+      }
+    ],
+    "motion": [
+      {
+        "name": "control",
+        "value": "160ms ease-out",
+        "purpose": "Background and foreground state changes; disabled for reduced motion."
+      }
+    ],
+    "breakpoints": [
+      { "name": "compact-container", "value": "1050px" },
+      { "name": "phone-container", "value": "700px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The next concrete action in a guided workflow.",
+      "html": "<button class=\"ds-primary\">เตรียมข้อร้องเรียน</button>",
+      "css": ".ds-primary { min-height:44px; padding:10px 17px; border:0; border-radius:8px; background:var(--primary, #4461ad); color:#fff; font:600 14px system-ui; cursor:pointer; } .ds-primary:hover { background:var(--primary-hover, #334e93); } .ds-primary:focus-visible { outline:3px solid var(--focus, #4461ad); outline-offset:3px; }"
+    },
+    {
+      "name": "Secondary button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "A reversible alternative or supporting action.",
+      "html": "<button class=\"ds-secondary\">ย้อนกลับ</button>",
+      "css": ".ds-secondary { min-height:44px; padding:10px 17px; border:1px solid var(--line, #dce2ec); border-radius:8px; background:var(--surface, #fff); color:var(--brand-ink, #365497); font:600 14px system-ui; cursor:pointer; } .ds-secondary:hover { background:var(--brand-soft, #eaf0fc); } .ds-secondary:focus-visible { outline:3px solid var(--focus, #4461ad); outline-offset:3px; }"
+    },
+    {
+      "name": "Text input",
+      "kind": "input",
+      "description": "Optional information with a visible native field.",
+      "html": "<label class=\"ds-field\">สินค้า / รุ่น<input placeholder=\"เช่น Nova X1\"></label>",
+      "css": ".ds-field { display:grid; gap:7px; color:var(--text, #26314b); font:550 14px system-ui; } .ds-field input { min-height:44px; padding:10px 12px; border:1px solid var(--line, #dce2ec); border-radius:8px; background:var(--surface, #fff); color:var(--text, #26314b); font:inherit; caret-color:var(--brand-ink, #365497); } .ds-field input::placeholder { color:var(--muted, #5b6980); } .ds-field input:focus-visible { outline:3px solid var(--focus, #4461ad); outline-offset:3px; }"
+    },
+    {
+      "name": "Selected navigation",
+      "kind": "nav",
+      "description": "Role-scoped navigation with explicit active selection.",
+      "html": "<a class=\"ds-nav\" href=\"#\">Business Resolution</a>",
+      "css": ".ds-nav { display:block; min-height:48px; padding:10px 12px; border-radius:8px; background:var(--primary, #4461ad); color:#fff; font:600 13px system-ui; text-decoration:none; } .ds-nav:hover { background:var(--primary-hover, #334e93); } .ds-nav:focus-visible { outline:3px solid var(--focus, #4461ad); outline-offset:3px; }"
+    },
+    {
+      "name": "Status badge",
+      "kind": "chip",
+      "description": "A text label that never depends on color alone.",
+      "html": "<span class=\"ds-status\">กำลังตรวจสอบ</span>",
+      "css": ".ds-status { display:inline-flex; padding:4px 9px; border-radius:6px; background:var(--brand-soft, #eaf0fc); color:var(--brand-ink, #365497); font:550 12px/1.6 system-ui; }"
+    },
+    {
+      "name": "Work surface",
+      "kind": "card",
+      "refersTo": "surface",
+      "description": "One task or collection; separated by a border, not a shadow.",
+      "html": "<section class=\"ds-surface\"><h2>ติดตามข้อร้องเรียน</h2><p>ดูข้อมูลและขั้นตอนถัดไป</p></section>",
+      "css": ".ds-surface { padding:24px; border:1px solid var(--line, #dce2ec); border-radius:12px; background:var(--surface, #fff); color:var(--text, #26314b); font:14px/1.65 system-ui; } .ds-surface h2 { margin:0; font-size:19px; font-weight:650; } .ds-surface p { margin:6px 0 0; color:var(--muted, #5b6980); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "A shared resolution workspace",
+    "overview": "The existing Legal Check blue/cream identity is extended into separate Consumer, Business, and Moderator demo workspaces. Familiar application navigation, native inputs, explicit statuses, and readable Thai content take priority over decorative expression. The same system supports both light and dark appearances.",
+    "keyCharacteristics": [
+      "Clear separation of roles without changing the underlying component language.",
+      "Blue selection and actions; warm tones for guidance and business context.",
+      "Neutral complaint presentation, never an accusation feed.",
+      "Flat, bordered work surfaces and a mobile phone-preview frame."
+    ],
+    "rules": [
+      {
+        "name": "The Paired Surface Rule",
+        "body": "Use semantic foreground/background pairs. Statuses always include a text label; color alone never communicates risk or publication state.",
+        "section": "colors"
+      }
+    ],
+    "dos": [
+      "Do keep complaint handling separate from public-publication status.",
+      "Do use the same semantic tokens across onboarding, dialogs, and phone presentation.",
+      "Do keep optional fields skippable and summarize what will happen before submission.",
+      "Do use clear language for simulated capabilities and storage failures."
+    ],
+    "donts": [
+      "Don't use color, counts, or verification as proof of wrongdoing.",
+      "Don't expose raw private complaints or evidence as community decoration.",
+      "Don't add decorative eyebrow headings or an aggressive social-feed visual language.",
+      "Don't rely on hosted assets for the core prototype to render or function."
+    ]
+  }
+}

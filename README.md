@@ -1,216 +1,105 @@
-Welcome to your new TanStack Start app!
+# Legal Check
 
-## Project structure
+A Thai-language, frontend-only consumer-protection and business-resolution prototype.
+All people, organizations, complaints, and verification states in the seeded scenarios
+are fictional. AI features are deterministic local simulations, not a connected AI service.
 
-- `src/routes/index.tsx` composes the workspace views and owns shared state:
-  cases, group memberships, search, the legal-check draft, and active dialogs.
-- `src/components/` contains reusable UI (`Icon`, `Modal`, `StatCard`,
-  `ViewLink`, and `Toast`) and feature folders: `layout`, `dashboard`, `cases`,
-  `legal`, `connect`, `business`, and `resources`.
-- `src/data/legal-check.ts` holds sample cases, navigation, tool descriptions,
-  and article content.
-- `src/types/legal-check.ts` defines the shared case, article, and draft types.
-- `src/hooks/use-local.ts` handles Local Storage persistence. Its existing keys
-  and stored data format are unchanged.
-- `src/styles.css` remains the shared stylesheet.
+## Run and validate
 
-## Display modes
-
-On entry, visitors choose Desktop or Mobile; the toolbar can switch between them
-without resetting the current view, legal-check draft, or saved cases. The choice
-is intentionally per visit (a reload shows the chooser again).
-
-`DeviceWorkspace` owns the presentation only. Mobile uses a scrollable phone
-frame, persistent bottom navigation, and stacked case cards. Desktop retains the
-wide workspace (horizontally scrollable if explicitly chosen on a small device).
-Both modes render the same components and share the existing Local Storage keys.
-App breakpoints use the named `app` CSS container, not the browser width, so the
-phone layout works inside its frame on a desktop too. The chooser and phone-frame
-styles live in `src/components/layout/device-workspace.css`.
-
-Feature components receive data and action callbacks rather than importing the
-route or accessing Local Storage directly. Keep state that must survive switching
-views, such as the legal-check draft, in the route; keep UI-only state, such as the
-mobile menu, with the component that uses it.
-
-# Getting Started
-
-To run this application:
+Use Node 22.18+ and pnpm. No environment variables, database, API keys, or backend are needed.
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-# Building For Production
-
-To build this application for production:
+Open `http://localhost:3000`. First select Light/Dark Mode, then Consumer or Business.
+Use the role selector to switch to either workspace or **Moderator demo**. The sidebar
+selects a fictional consumer or organization; this is not authentication.
 
 ```bash
-pnpm build
+pnpm test                 # Classification, clustering, privacy/publication rules
+pnpm exec tsc --noEmit     # Application and test types
+pnpm build                # Production frontend
+pnpm exec playwright install chromium  # Once, if the browser is not installed
+pnpm test:e2e             # End-to-end scenarios and responsive checks
 ```
 
-## Styling
+Playwright starts the Vite development server automatically. Screenshots go to
+`.impeccable/review/`; failure traces go to `test-results/`. Both are ignored.
+The application itself does not require external services or hosted fonts/images.
 
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
+## Try the complete flow
 
-### Removing Tailwind CSS
+1. **Consumer → Claim Assistant:** describe `Nova X1 แบตเตอรี่ร้อนผิดปกติ`.
+   Brand/model/category can be detected from this text. Other fields and receipts
+   are optional. Check useful evidence, optionally attach files, review the summary,
+   and submit.
+2. **My Claims:** inspect the saved private complaint, evidence-sharing permissions,
+   checklist, additional information, business responses, and history.
+3. **Business → Nova Mobile → Business Resolution:** find the complaint using search
+   and brand/product/category/tag/status filters. Respond and change its status.
+   Switch to Home Care to verify that Nova complaints are not in that organization's inbox.
+4. **Case Connect:** matching battery complaints share the existing issue group.
+   Raw allegations and evidence are never public. Safe discussion posts and explicitly
+   public, low-risk business responses appear only in an eligible group.
+5. **Risk scenario:** submit a battery complaint containing `ร้านโกง`. It remains
+   privately available to the relevant business and pauses public visibility of its group
+   until reviewed. The UI offers a neutral placeholder rewrite without inventing facts.
+6. **Moderator demo:** review related claims and evidence, inspect local risk signals,
+   record a reason, and approve/request edits/hide/reject publication. Private complaints
+   are not deleted. Review reports/appeals separately and keep a decision history.
+7. **Moderator → เกณฑ์และบัญชีจำลอง:** change distinct-consumer, verified-contact,
+   and reviewed-evidence thresholds. At least two distinct demo accounts are always
+   required; thresholds never establish that an allegation is true.
+8. Switch roles and refresh to verify persistence. Theme and Desktop/Mobile preview
+   also persist. Mobile uses the existing phone frame and a role-specific bottom navigation.
 
-If you prefer not to use Tailwind CSS:
+The initial data includes an approved two-consumer battery group, a private refund claim,
+and a high-risk warranty allegation. Switch fictional consumers to test multiple accounts.
+Account verification, purchase-evidence indicators, transaction review, and business
+verification have separate meanings explained in the interface.
 
-1. Remove the demo pages in `src/routes/demo/`
-2. Replace the Tailwind import in `src/styles.css` with your own styles
-3. Remove `tailwindcss()` from the plugins array in `vite.config.ts`
-4. Remove `@tailwindcss/vite` and `tailwindcss` from `package.json`
+## Architecture
 
+- `src/routes/index.tsx`: TanStack Router entry and view search parameter.
+- `src/components/platform/platform-app.tsx`: shared state and role-scoped composition.
+- `src/components/platform/`: onboarding, navigation, dashboards, optional claim checklist,
+  complaint detail/evidence permissions, community discussions, moderation, and legal guidance.
+- `src/types/platform.ts`: the persisted domain model.
+- `src/lib/platform.ts`: pure classification, clustering, risk, publication, and moderation rules.
+  UI components use this source of truth instead of duplicating eligibility logic.
+- `src/lib/evidence.ts`: bounded file reading, SHA-256 duplicate fingerprints, and basic
+  filename/text privacy flags. Images/PDFs require manual review; no authenticity detection.
+- `src/hooks/use-platform.ts`: transactional LocalStorage writes. Failed writes leave
+  the prior state intact and show an error; unreadable data is not silently overwritten.
+- `src/data/platform.ts`: synthetic demo seed.
+- `src/styles.css`: semantic light/dark tokens and responsive application styles.
+- `src/components/layout/device-workspace.*`: presentation-only desktop/mobile shell.
+- `src/lib/platform.test.ts`, `tests/platform.spec.ts`: domain and browser regression checks.
 
+The earlier prototype components/data remain separate from the active platform module.
+They are not part of the current route or runtime network dependencies.
 
-## Routing
+## Persistence and safety limits
 
-This project uses [TanStack Router](https://tanstack.com/router) with file-based routing. Routes are managed as files in `src/routes`.
+The versioned `legal-check-platform-v1` LocalStorage record contains preferences, profiles,
+claim/legal drafts, complaints, evidence, groups, discussion posts, business replies,
+reports, settings, and history. On first use, existing `legal-check-cases` entries are
+imported as private complaints; the original legacy record is retained.
 
-### Adding A Route
+- Persistent data stays in this browser. Clearing site storage removes the demo.
+- Evidence is limited to **3 files per complaint, 350 KB each**. PNG/JPEG/WebP/PDF/TXT
+  are supported. Files are private; only an explicitly authorized, non-sensitive file
+  is shown to the relevant business in the UI.
+- LocalStorage is not encrypted. Role/profile switching is a demo affordance, **not an
+  access-control boundary**. Anyone using this browser can inspect its data.
+- No server, database, external data persistence, real account verification, AI API,
+  complaint submission to authorities, or cross-device synchronization is implemented.
+- Counts, risk labels, and moderation approval do not prove allegations or legal liability.
+  Lemon Law is described as a draft/concept, not an enacted entitlement.
+- Multiple browser tabs are not a collaborative system. Use one tab while demonstrating
+  role switching to avoid independent tabs overwriting the same local snapshot.
 
-To add a new route to your application just add a new file in the `./src/routes` directory.
-
-TanStack will automatically generate the content of the route file for you.
-
-Now that you have two routes you can use a `Link` component to navigate between them.
-
-### Adding Links
-
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from "@tanstack/react-router";
-```
-
-Then anywhere in your JSX you can use it like so:
-
-```tsx
-<Link to="/about">About</Link>
-```
-
-This will create a link that will navigate to the `/about` route.
-
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
-
-### Using A Layout
-
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you render `{children}` in the `shellComponent`.
-
-Here is an example layout that includes a header:
-
-```tsx
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'My App' },
-    ],
-  }),
-  shellComponent: ({ children }) => (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <header>
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
-          </nav>
-        </header>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  ),
-})
-```
-
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
-
-## Server Functions
-
-TanStack Start provides server functions that allow you to write server-side code that seamlessly integrates with your client components.
-
-```tsx
-import { createServerFn } from '@tanstack/react-start'
-
-const getServerTime = createServerFn({
-  method: 'GET',
-}).handler(async () => {
-  return new Date().toISOString()
-})
-
-// Use in a component
-function MyComponent() {
-  const [time, setTime] = useState('')
-  
-  useEffect(() => {
-    getServerTime().then(setTime)
-  }, [])
-  
-  return <div>Server time: {time}</div>
-}
-```
-
-## API Routes
-
-You can create API routes by using the `server` property in your route definitions:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-import { json } from '@tanstack/react-start'
-
-export const Route = createFileRoute('/api/hello')({
-  server: {
-    handlers: {
-      GET: () => json({ message: 'Hello, World!' }),
-    },
-  },
-})
-```
-
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-
-export const Route = createFileRoute('/people')({
-  loader: async () => {
-    const response = await fetch('https://swapi.dev/api/people')
-    return response.json()
-  },
-  component: PeopleComponent,
-})
-
-function PeopleComponent() {
-  const data = Route.useLoaderData()
-  return (
-    <ul>
-      {data.results.map((person) => (
-        <li key={person.name}>{person.name}</li>
-      ))}
-    </ul>
-  )
-}
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
-
-For TanStack Start specific documentation, visit [TanStack Start](https://tanstack.com/start).
+Use synthetic information only. This prototype is not suitable for real sensitive case
+handling or public moderation without a separate production design and legal review.

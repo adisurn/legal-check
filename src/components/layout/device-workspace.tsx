@@ -1,20 +1,24 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import { Icon } from "../icon";
-import { DeviceChooser } from "./device-chooser";
 import type { DisplayMode } from "./device-chooser";
 
 // Keep a single app tree: changing the presentation must not reset drafts or cases.
-export function DeviceWorkspace({ children }: { children: ReactNode }) {
-  const [mode, setMode] = useState<DisplayMode | null>(null);
+export function DeviceWorkspace({
+  children,
+  mode,
+  onModeChange,
+}: {
+  children: ReactNode;
+  mode: DisplayMode;
+  onModeChange: (mode: DisplayMode) => void;
+}) {
   const viewport = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (mode)
       viewport.current?.querySelector("h1")?.focus({ preventScroll: true });
   }, [mode]);
-
-  if (!mode) return <DeviceChooser onChoose={setMode} />;
 
   return (
     <div className={`device-workspace device-workspace--${mode}`}>
@@ -33,13 +37,13 @@ export function DeviceWorkspace({ children }: { children: ReactNode }) {
         >
           <button
             aria-pressed={mode === "desktop"}
-            onClick={() => setMode("desktop")}
+            onClick={() => onModeChange("desktop")}
           >
             <Icon name="desktop" size={17} /> Desktop
           </button>
           <button
             aria-pressed={mode === "mobile"}
-            onClick={() => setMode("mobile")}
+            onClick={() => onModeChange("mobile")}
           >
             <Icon name="phone" size={17} /> Mobile
           </button>
