@@ -41,7 +41,7 @@ test("English and Thai use bundled fonts, including mixed-language text", async 
           isCustomFont: true,
         }),
         expect.objectContaining({
-          familyName: expect.stringMatching(/^Noto Sans Thai/),
+          familyName: expect.stringMatching(/^IBM Plex Sans Thai/),
           isCustomFont: true,
         }),
       ]),

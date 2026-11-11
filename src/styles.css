@@ -5,7 +5,7 @@
 :root {
   /* Inter covers English; Thai glyphs fall through to Noto Sans Thai. */
   font-family:
-    "Inter Variable", "Noto Sans Thai Variable", "Thonburi", "Leelawadee UI",
+    "Inter Variable", "IBM Plex Sans Thai", "Thonburi", "Leelawadee UI",
     system-ui, sans-serif;
   font-size: 14px;
   font-synthesis: none;
