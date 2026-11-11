@@ -22,6 +22,7 @@ export type IconName =
   | "upload"
   | "desktop"
   | "phone"
+  | "exclamation"
   | "spark";
 
 export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
@@ -101,6 +102,13 @@ export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
         <rect x="6" y="2" width="12" height="20" rx="3" />
         <path d="M10 5h4m-3 14h2" />
       </>
+      ),
+    exclamation: (
+          <>
+              <circle cx="12" cy="12" r="10" />
+                <path d="M12 8v4" />
+                <path d="M12 16h.01" />
+        </>
     ),
     spark: (
       <path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5ZM20 2v4m-2-2h4" />

@@ -39,12 +39,9 @@ export function LegalAdvisor({
             {business ? "สำหรับธุรกิจและผู้ประกอบการ" : "สำหรับผู้บริโภค"}
           </p>
         </div>
-        <Badge tone="brand">Rule-based AI simulation</Badge>
       </div>
       <Notice>
-        วิเคราะห์ด้วยกฎและคำสำคัญในเบราว์เซอร์ ไม่มี AI
-        หรือบริการภายนอกเชื่อมต่อ เป็นข้อมูลกฎหมายทั่วไป
-        ไม่ใช่คำปรึกษาวิชาชีพหรือคำตัดสินข้อพิพาท
+        ผลลัพธ์ที่ได้ไม่ใช่คำปรึกษาวิชาชีพหรือคำตัดสินข้อพิพาท
       </Notice>
       <section className="surface legal-workspace">
         <h2>
@@ -64,7 +61,7 @@ export function LegalAdvisor({
           <textarea
             rows={7}
             maxLength={6000}
-            value={text}
+                      value={text}
             onChange={(e) => {
               setResult(false);
               commit((s) => ({

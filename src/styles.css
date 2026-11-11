@@ -283,7 +283,7 @@ fieldset {
   color: var(--muted);
 }
 .supporting {
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.8;
   margin-top: 6px;
 }
@@ -820,7 +820,9 @@ fieldset {
 .consumer-intro {
   padding: 30px 34px;
   border-radius: 14px;
-  background: var(--cream);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
   color: #344775;
   display: grid;
   grid-template-columns: 1.2fr 1fr;

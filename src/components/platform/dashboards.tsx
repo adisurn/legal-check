@@ -16,7 +16,6 @@ import {
   FilterBar,
   matchesFilters,
   Notice,
-  TrustLegend,
 } from "./shared";
 
 export function ConsumerDashboard({
@@ -115,19 +114,7 @@ export function ConsumerDashboard({
           </strong>
         </div>
       </div>
-      <section className="surface">
-        <div className="section-line">
-          <h2>ติดตามเรื่องล่าสุด</h2>
-          <ViewLink view="claims" className="inline-link">
-            ดูทั้งหมด <Icon name="arrow" size={15} />
-          </ViewLink>
-        </div>
-        <ClaimList
-          claims={claims.slice(0, 4)}
-          state={state}
-          onSelect={onSelect}
-        />
-      </section>
+      
       <div className="dashboard-columns">
         <section className="surface">
           <div className="section-line">
@@ -137,37 +124,27 @@ export function ConsumerDashboard({
           <p className="supporting">
             Case Connect มี{" "}
             {state.clusters.filter((c) => publication(state, c).visible).length}{" "}
-            ประเด็นที่ผ่านเกณฑ์เผยแพร่ในข้อมูลสาธิต
+            ประเด็นที่ผ่านเกณฑ์เผยแพร่ในข้อมูลจำลอง
             จำนวนผู้ร้องเรียนไม่ใช่ข้อพิสูจน์ว่าธุรกิจผิด
           </p>
           <ViewLink view="connect" className="button button--secondary">
             ค้นหาประเด็นที่คล้ายกัน
           </ViewLink>
-        </section>
-        <section className="surface">
-          <h2>สัญญาณความน่าเชื่อถือ</h2>
-          <p className="supporting">
-            จำลองการยืนยันช่องทางติดต่อเพื่อทดสอบเกณฑ์การเผยแพร่ ไม่มีการส่ง OTP
-            หรือข้อมูลออกนอกเบราว์เซอร์
-          </p>
-          <label className="checkbox-line">
-            <input
-              type="checkbox"
-              checked={user.verified}
-              onChange={(e) =>
-                commit((s) => ({
-                  ...s,
-                  consumers: s.consumers.map((c) =>
-                    c.id === user.id ? { ...c, verified: e.target.checked } : c,
-                  ),
-                }))
-              }
-            />
-            ยืนยันการติดต่อ (จำลอง)
-          </label>
-        </section>
+              </section>
+              <section className="surface">
+                <div className="section-line">
+                  <h2>ติดตามเรื่องล่าสุด</h2>
+                  <ViewLink view="claims" className="inline-link">
+                    ดูทั้งหมด <Icon name="arrow" size={15} />
+                  </ViewLink>
+                </div>
+                <ClaimList
+                  claims={claims.slice(0, 4)}
+                  state={state}
+                  onSelect={onSelect}
+                />
+              </section>
       </div>
-      <TrustLegend />
     </>
   );
 }
@@ -197,7 +174,7 @@ export function BusinessDashboard({
     <>
       <div className="page-title">
         <div>
-          <h1>รับฟังให้ครบ แก้ไขให้ตรงจุด</h1>
+          <h1>Business Overview</h1>
           <p>{business.name} · แสดงเฉพาะข้อร้องเรียนที่เชื่อมโยงกับองค์กรนี้</p>
         </div>
         <Badge tone={business.verified ? "success" : "warning"}>
@@ -206,7 +183,7 @@ export function BusinessDashboard({
             : "ยังไม่ยืนยันธุรกิจ"}
         </Badge>
       </div>
-      <div className="business-welcome">
+      {/*<div className="business-welcome">
         <div>
           <Icon name="business" size={28} />
           <h2>ทุกข้อร้องเรียน คือโอกาสในการดูแล</h2>
@@ -218,7 +195,7 @@ export function BusinessDashboard({
         <ViewLink view="resolution" className="button button--primary">
           เปิด Business Resolution <Icon name="arrow" size={18} />
         </ViewLink>
-      </div>
+      </div>*/}
       <div className="metric-strip">
         <div>
           <span>ข้อร้องเรียนที่เกี่ยวข้อง</span>
@@ -292,7 +269,7 @@ export function BusinessDashboard({
       </div>
       <section className="surface">
         <div className="section-line">
-          <h2>รอการดูแลจากทีมของคุณ</h2>
+          <h2>รอการดูแล</h2>
           <ViewLink view="resolution" className="inline-link">
             จัดการทั้งหมด <Icon name="arrow" size={16} />
           </ViewLink>
@@ -305,7 +282,6 @@ export function BusinessDashboard({
           onSelect={onSelect}
         />
       </section>
-      <TrustLegend />
     </>
   );
 }
@@ -338,12 +314,6 @@ export function ClaimsWorkspace({
               : "ติดตามสถานะ คำตอบ และสิ่งที่ต้องเตรียมเพิ่มเติม"}
           </p>
         </div>
-        {!business && (
-          <ViewLink view="assistant" className="button button--primary">
-            <Icon name="plus" size={18} />
-            เตรียมเรื่องใหม่
-          </ViewLink>
-        )}
       </div>
       <Notice>
         {business

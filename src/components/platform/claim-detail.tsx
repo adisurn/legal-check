@@ -61,7 +61,7 @@ export function EvidenceList({
     <div className="evidence-list">
       {!business && !moderator && (
         <label className="field">
-          เพิ่มหลักฐานประกอบ (ไม่บังคับ)
+          เพิ่มหลักฐานประกอบ
           <input
             type="file"
             accept={fileAccept}

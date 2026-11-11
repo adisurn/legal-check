@@ -520,10 +520,6 @@ export function SafetySettings({
         ))}
         {state.businesses.map((business) => (
           <label className="profile-toggle" key={business.id}>
-            <span>
-              <strong>{business.name}</strong>
-              <small>Business Verified · องค์กรจำลอง</small>
-            </span>
             <input
               type="checkbox"
               checked={business.verified}

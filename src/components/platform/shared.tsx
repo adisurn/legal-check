@@ -119,35 +119,6 @@ export function ClaimList({
     </div>
   );
 }
-export function TrustLegend() {
-  return (
-    <details className="trust-legend">
-      <summary>เครื่องหมายความน่าเชื่อถือหมายถึงอะไร?</summary>
-      <ul>
-        <li>
-          <strong>Account Verified:</strong> จำลองว่าตรวจช่องทางติดต่อแล้ว
-          ไม่ใช่การพิสูจน์ตัวบุคคลจริง
-        </li>
-        <li>
-          <strong>Purchase Evidence Provided:</strong> มีเอกสารประเภทการซื้อ
-          ผู้ใช้ไม่จำเป็นต้องมีใบเสร็จทุกกรณี
-        </li>
-        <li>
-          <strong>Transaction Evidence Reviewed:</strong>{" "}
-          ผู้ดูแลจำลองตรวจความเกี่ยวข้องและความสอดคล้องแล้ว
-          ไม่รับรองว่าเอกสารแท้
-        </li>
-        <li>
-          <strong>Business Verified:</strong>{" "}
-          โปรไฟล์ธุรกิจผ่านขั้นตอนยืนยันจำลองเท่านั้น
-        </li>
-      </ul>
-      <p>
-        ทุกสถานะเป็นข้อมูลจำลอง ไม่ใช่ข้อพิสูจน์ว่าคำร้องเป็นจริงหรือฝ่ายใดผิด
-      </p>
-    </details>
-  );
-}
 
 export interface Filters {
   query: string;

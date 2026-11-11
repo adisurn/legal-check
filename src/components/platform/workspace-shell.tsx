@@ -11,19 +11,19 @@ export const roleNavigation: Record<Role, NavItem[]> = {
   consumer: [
     {
       view: "overview",
-      label: "ภาพรวมของฉัน",
+      label: "Overview",
       short: "หน้าหลัก",
       icon: "grid",
     },
     {
       view: "assistant",
       label: "Claim Assistant",
-      short: "เตรียมเรื่อง",
+      short: "ร้องเรียน",
       icon: "claim",
     },
     {
       view: "claims",
-      label: "ข้อร้องเรียนของฉัน",
+      label: "History Claims",
       short: "ติดตาม",
       icon: "file",
     },
@@ -36,7 +36,7 @@ export const roleNavigation: Record<Role, NavItem[]> = {
     },
   ],
   business: [
-    { view: "overview", label: "ภาพรวมธุรกิจ", short: "ภาพรวม", icon: "grid" },
+    { view: "overview", label: "Overview", short: "ภาพรวม", icon: "grid" },
     {
       view: "resolution",
       label: "Business Resolution",
@@ -45,13 +45,13 @@ export const roleNavigation: Record<Role, NavItem[]> = {
     },
     {
       view: "connect",
-      label: "ประเด็นสาธารณะ",
+      label: "Case Connect",
       short: "ประเด็น",
       icon: "people",
     },
     {
       view: "legal",
-      label: "AI Legal Check ธุรกิจ",
+      label: "AI Legal Check",
       short: "เช็กนโยบาย",
       icon: "scan",
     },
@@ -163,16 +163,16 @@ export function WorkspaceShell({
             >
               <Icon name={item.icon} />
               <span>{item.label}</span>
-              {item.view === "legal" && <small>DEMO</small>}
+                  {item.view === "legal"}
             </ViewLink>
           ))}
         </nav>
         <div className="sidebar-context">
           <label className="field">
             {role === "business"
-              ? "องค์กรที่กำลังสาธิต"
+              ? "องค์กรที่กำลังจำลอง"
               : role === "consumer"
-                ? "ผู้บริโภคที่กำลังสาธิต"
+                ? "ผู้บริโภคที่กำลังจำลอง"
                 : "พื้นที่ผู้ดูแลจำลอง"}
             {role !== "moderator" && (
               <select
@@ -207,20 +207,13 @@ export function WorkspaceShell({
               </select>
             )}
           </label>
-          <p>
+          {/*<p>
             {role === "business"
               ? business.verified
                 ? "Business Verified · จำลอง"
                 : "ยังไม่ยืนยันธุรกิจ"
               : "สลับบัญชีตัวอย่างเพื่อทดสอบการจัดกลุ่ม"}
-          </p>
-        </div>
-        <div className="sidebar-foot">
-          <Icon name="shield" size={18} />
-          <p>
-            <strong>ข้อมูลอยู่ในเบราว์เซอร์นี้</strong>
-            <span>ไม่มีการส่งเรื่องออกนอกต้นแบบ</span>
-          </p>
+          </p>*/}
         </div>
       </aside>
       {menuOpen && (
@@ -298,14 +291,9 @@ export function WorkspaceShell({
           className="workspace-content"
           tabIndex={-1}
         >
-          <div className="demo-strip">
-            <span className="demo-dot" /> ข้อมูลสาธิต · AI จำลอง ·
-            ไม่ใช่คำวินิจฉัยทางกฎหมาย
-          </div>
           {children}
           <footer className="platform-footer">
             <span>Legal Check · ฟังทุกฝ่าย หาทางออกด้วยข้อมูล</span>
-            <span>Local prototype · ไม่ได้ส่งข้อร้องเรียนจริง</span>
           </footer>
         </main>
         <nav className="platform-mobile-nav" aria-label="เมนูหลักบนมือถือ">

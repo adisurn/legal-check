@@ -84,7 +84,7 @@ export function CaseCommunity({
           <section className="surface">
             <FilterBar items={related} value={filters} onChange={setFilters} />
             <div className="section-line list-toolbar">
-              <h2>ประเด็นที่ผ่านเกณฑ์เผยแพร่</h2>
+              <h2>ประเด็นที่เผยแพร่</h2>
               <span className="supporting">{visible.length} ประเด็น</span>
             </div>
             {!visible.length && (

@@ -43,20 +43,24 @@ export function ClaimAssistant({
   const [step, setStep] = useState(0);
   const [error, setError] = useState("");
   const [reading, setReading] = useState(false);
+  const [acknowledged, setAcknowledged] = useState(false);
   const info = classify(draft, state.businesses);
   const duplicates = duplicateFingerprints(state, draft.evidence);
   const risk = {
     ...riskForClaim(state, draft),
     suggestion: assessRisk(draft.description).suggestion,
   };
-  const update = (changes: Partial<ClaimDraft>) =>
-    commit((s) => ({
+  const update = (changes: Partial<ClaimDraft>) => {
+    // If the draft changes, require the user to confirm the statement again.
+    setAcknowledged(false);
+    return commit((s) => ({
       ...s,
       drafts: {
         ...s.drafts,
         [consumerId]: { ...(s.drafts[consumerId] ?? emptyDraft()), ...changes },
       },
     }));
+  };
   const updateEvidence = (evidenceId: string, changes: Partial<Evidence>) =>
     update({
       evidence: draft.evidence.map((e) =>
@@ -83,6 +87,10 @@ export function ClaimAssistant({
     }
   };
   const submit = () => {
+    if (!acknowledged) {
+      setError("โปรดยืนยันว่าข้อมูลที่กล่าวเป็นความจริงก่อนส่งเรื่อง");
+      return;
+    }
     if (
       ![draft.description, draft.brand, draft.product, draft.category].some(
         (value) => value.trim(),
@@ -102,6 +110,7 @@ export function ClaimAssistant({
       })
     ) {
       setStep(0);
+      setAcknowledged(false);
       onCreated(created);
     }
   };
@@ -109,9 +118,9 @@ export function ClaimAssistant({
     <>
       <div className="page-title">
         <div>
-          <h1>เตรียมเรื่องให้พร้อม ทีละข้อ</h1>
+          <h1>Claim Assistant</h1>
           <p>
-            Claim Assistant · ข้ามข้อมูลที่ยังไม่ทราบได้ ไม่จำเป็นต้องมีใบเสร็จ
+            ช่วยเตรียมเรื่องการร้องเรียนให้ผู้บริโภค
           </p>
         </div>
         <Badge tone="brand">บันทึกร่างอัตโนมัติ</Badge>
@@ -126,6 +135,7 @@ export function ClaimAssistant({
           >
             <button
               onClick={() => {
+                if (step === 2 && index !== 2) setAcknowledged(false);
                 setStep(index);
                 setError("");
               }}
@@ -143,7 +153,7 @@ export function ClaimAssistant({
             <>
               <h2>เริ่มจากสิ่งที่คุณทราบ</h2>
               <p className="supporting">
-                ทุกช่องเป็นตัวเลือก ระบบจะช่วยจัดหมวดหมู่จากข้อมูลที่มี
+                ระบบจะช่วยจัดหมวดหมู่จากข้อมูลที่มี
               </p>
               <label className="field">
                 สินค้า / บริการประเภทใด
@@ -204,7 +214,7 @@ export function ClaimAssistant({
               </label>
               <fieldset className="category-checklist">
                 <legend>
-                  ประเภทปัญหา <span>(เลือกเองหรือให้ระบบแนะนำ)</span>
+                  ประเภทปัญหา
                 </legend>
                 <div className="category-options">
                   {categories.map((category) => (
@@ -223,12 +233,6 @@ export function ClaimAssistant({
                     </label>
                   ))}
                 </div>
-                <button
-                  className="inline-link"
-                  onClick={() => update({ category: "" })}
-                >
-                  ใช้การจัดหมวดหมู่จำลอง
-                </button>
               </fieldset>
               <label className="field">
                 อยากให้ธุรกิจช่วยอย่างไร?
@@ -246,7 +250,6 @@ export function ClaimAssistant({
               <h2>มีอะไรพร้อมแล้วบ้าง?</h2>
               <p className="supporting">
                 ใช้เช็กลิสต์นี้ช่วยเตรียมเรื่อง
-                ไม่ใช่เงื่อนไขบังคับรับข้อร้องเรียน
               </p>
               <div className="evidence-checklist">
                 {evidenceChecklist.map((label) => (
@@ -271,10 +274,10 @@ export function ClaimAssistant({
                 <strong>
                   {reading
                     ? "กำลังอ่านและบันทึกไฟล์…"
-                    : "แนบหลักฐาน (ไม่บังคับ)"}
+                    : "แนบหลักฐาน"}
                 </strong>
                 <span>
-                  สูงสุด 3 ไฟล์ · ไฟล์ละ 350 KB · PNG, JPG, WebP, PDF, TXT
+                  สูงสุด 10 ไฟล์ · ไฟล์ละ 350 KB · PNG, JPG, WebP, PDF, TXT
                 </span>
                 <input
                   type="file"
@@ -288,11 +291,6 @@ export function ClaimAssistant({
                   }}
                 />
               </label>
-              <Notice>
-                ไฟล์อยู่ใน LocalStorage เท่านั้น ไม่เผยแพร่สาธารณะ
-                ตรวจและลบข้อมูลส่วนตัวจากไฟล์ก่อนแนบ
-                ระบบจำลองไม่สามารถตรวจความแท้ของภาพหรือเอกสารได้
-              </Notice>
               {draft.evidence.map((evidence) => (
                 <div className="evidence-item" key={evidence.id}>
                   <div className="section-line">
@@ -363,8 +361,9 @@ export function ClaimAssistant({
             <>
               <h2>ตรวจสรุปก่อนส่งเรื่อง</h2>
               <p className="supporting">
-                ส่งเข้ากล่องธุรกิจภายในต้นแบบ ไม่ใช่การร้องเรียนต่อหน่วยงานจริง
+                ส่งเข้า LegalCheck ไม่ใช่การร้องเรียนต่อหน่วยงาน
               </p>
+              
               <dl className="summary-grid">
                 <dt>แบรนด์ / สินค้า</dt>
                 <dd>
@@ -379,7 +378,7 @@ export function ClaimAssistant({
                 <dt>สิ่งที่ต้องการ</dt>
                 <dd>{draft.requestedOutcome || "ยังไม่ระบุ"}</dd>
                 <dt>หลักฐาน</dt>
-                <dd>
+                {/*<dd>
                   {draft.evidence.length} ไฟล์ · อนุญาตธุรกิจ{" "}
                   {
                     draft.evidence.filter(
@@ -387,6 +386,9 @@ export function ClaimAssistant({
                     ).length
                   }{" "}
                   ไฟล์
+                </dd>*/}
+                <dd>
+                  {draft.evidence.length} ไฟล์
                 </dd>
                 <dt>ส่งถึง</dt>
                 <dd>
@@ -421,6 +423,7 @@ export function ClaimAssistant({
                       className="button button--secondary"
                       onClick={() => {
                         update({ description: risk.suggestion });
+                        setAcknowledged(false);
                         setStep(0);
                       }}
                     >
@@ -430,7 +433,6 @@ export function ClaimAssistant({
                 )}
               </div>
               <Notice warning={risk.level !== "low"}>
-                ข้อร้องเรียนจะถูกจัดกลุ่มภายในก่อน
                 การส่งเรื่องไม่ทำให้ข้อความกล่าวหาปรากฏสาธารณะทันที
                 และไม่มีผลให้เป็นการฟ้องคดีร่วมกัน
               </Notice>
@@ -440,12 +442,31 @@ export function ClaimAssistant({
             <p className="form-error" role="alert">
               {error}
             </p>
-          )}
-          <div className="form-actions">
+                  )}
+        
+                  <div className="form-actions">
+                      {step == 2 && (
+                          <label className="flex items-start gap-3 rounded-[10px] px-4.5 py-3.75 text-[11px] leading-[1.85] my-5 bg-red-300 text-red-600 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              className="mt-1 h-4 w-4 shrink-0"
+                              checked={acknowledged}
+                              aria-required="true"
+                              onChange={(e) => {
+                                setAcknowledged(e.target.checked);
+                                if (e.target.checked) setError("");
+                              }}
+                            />
+                            <span>
+                              ข้าพเจ้ายืนยันว่าข้อมูลที่ให้เป็นความจริงตามที่ทราบ และรับทราบว่าการให้ข้อมูลอันเป็นเท็จอาจมีความผิดและต้องรับโทษทางอาญา
+                            </span>
+                          </label>
+                      )}
             {step > 0 && (
               <button
                 className="button button--secondary"
                 onClick={() => {
+                  if (step === 2) setAcknowledged(false);
                   setStep(step - 1);
                   setError("");
                 }}
@@ -466,32 +487,16 @@ export function ClaimAssistant({
                 <Icon name="arrow" size={17} />
               </button>
             ) : (
-              <button className="button button--primary" onClick={submit}>
-                ยืนยันและส่งเรื่องในต้นแบบ <Icon name="check" size={17} />
+              <button
+                className="button button--primary disabled:cursor-not-allowed disabled:opacity-50"
+                onClick={submit}
+                disabled={!acknowledged}
+              >
+                ส่งเรื่อง <Icon name="check" size={17} />
               </button>
             )}
           </div>
         </section>
-        <aside className="assistant-guidance">
-          <Icon name="claim" size={30} />
-          <h2>
-            ข้อมูลพร้อม
-            <br />
-            ทางออกก็ชัดขึ้น
-          </h2>
-          <p>
-            ไม่จำเป็นต้องรู้ศัพท์กฎหมาย เริ่มจากเรื่องที่เกิดขึ้นจริง
-            และสิ่งที่อยากให้ธุรกิจช่วย
-          </p>
-          <ol>
-            <li>เตรียมเรื่องตามที่ทราบ</li>
-            <li>เลือกหลักฐานที่สะดวก</li>
-            <li>ติดตามคำตอบจากธุรกิจ</li>
-          </ol>
-          <p className="small-text">
-            ร่างของแต่ละบัญชีจำลองบันทึกแยกกันบนเบราว์เซอร์นี้
-          </p>
-        </aside>
       </div>
     </>
   );
