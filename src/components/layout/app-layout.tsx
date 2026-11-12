@@ -59,7 +59,7 @@ export function AppLayout({
             <Icon name="shield" size={29} />
           </span>
           <span>
-            Legal<span className="brand-light">Check</span>
+            Claim<span className="brand-light">Wise</span>
             <small>สิทธิของคุณ เราดูแล</small>
           </span>
         </Link>
@@ -144,7 +144,7 @@ export function AppLayout({
               <Icon name="grid" />
             </button>
             <span className="mobile-wordmark">
-              Legal<span>Check</span>
+              Claim<span>Wise</span>
             </span>
             <div className="breadcrumb-trail">
               <span>พื้นที่ของฉัน</span>

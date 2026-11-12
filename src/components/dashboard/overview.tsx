@@ -23,7 +23,7 @@ export function Overview({
         <div className="hero-copy">
           <span className="hero-tag">
             <span />
-            LEGAL CHECK อยู่เคียงข้างคุณ
+            ClaimWise อยู่เคียงข้างคุณ
           </span>
           <h2>
             เข้าใจสิทธิของคุณ
@@ -46,7 +46,7 @@ export function Overview({
               <Icon name="arrow" size={17} />
             </ViewLink>
             <button className="hero-secondary" onClick={onHelp}>
-              รู้จัก Legal Check <Icon name="arrow" size={16} />
+              รู้จัก ClaimWise <Icon name="arrow" size={16} />
             </button>
           </div>
           <span className="hero-footnote">

@@ -18,7 +18,7 @@ export function Onboarding({
         <span className="brand-symbol">
           <Icon name="shield" size={26} />
         </span>
-        Legal<span>Check</span>
+        Claim<span>Wise</span>
       </a>
       <main className="onboarding-content">
         <ol className="onboarding-steps" aria-label="ขั้นตอนเริ่มต้น">

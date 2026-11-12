@@ -26,7 +26,7 @@ export function DeviceWorkspace({
         <div className="display-brand">
           <Icon name="shield" size={20} />
           <strong>
-            Legal<span>Check</span>
+            Claim<span>Wise</span>
           </strong>
           <span className="display-toolbar-label">เลือกรูปแบบการแสดงผล</span>
         </div>

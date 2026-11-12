@@ -128,7 +128,7 @@ export function WorkspaceShell({
           <span className="brand-symbol">
             <Icon name="shield" size={26} />
           </span>
-          Legal<span>Check</span>
+          Claim<span>Wise</span>
         </ViewLink>
         <div className="workspace-identity">
           <span className="workspace-avatar">
@@ -293,7 +293,7 @@ export function WorkspaceShell({
         >
           {children}
           <footer className="platform-footer">
-            <span>Legal Check · ฟังทุกฝ่าย หาทางออกด้วยข้อมูล</span>
+            <span>ClaimWise · ฟังทุกฝ่าย หาทางออกด้วยข้อมูล</span>
           </footer>
         </main>
         <nav className="platform-mobile-nav" aria-label="เมนูหลักบนมือถือ">

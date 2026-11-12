@@ -361,7 +361,7 @@ export function ClaimAssistant({
             <>
               <h2>ตรวจสรุปก่อนส่งเรื่อง</h2>
               <p className="supporting">
-                ส่งเข้า LegalCheck ไม่ใช่การร้องเรียนต่อหน่วยงาน
+                ส่งเข้า ClaimWise ไม่ใช่การร้องเรียนต่อหน่วยงาน
               </p>
               
               <dl className="summary-grid">

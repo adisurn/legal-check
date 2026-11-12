@@ -40,7 +40,7 @@ export function ConsumerDashboard({
       <div className="page-title">
         <div>
           <h1>เรื่องสิทธิ เริ่มต้นได้ที่นี่</h1>
-          <p>พื้นที่ของ {user.name} · ติดตามทุกขั้นตอนในที่เดียว</p>
+          <p>พื้นที่ของ {user.name}</p>
         </div>
         <Badge tone={user.verified ? "success" : "neutral"}>
           {user.verified ? "Account Verified · จำลอง" : "บัญชีผู้ทดสอบ"}

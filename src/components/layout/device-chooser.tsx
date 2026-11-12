@@ -14,7 +14,7 @@ export function DeviceChooser({
           <Icon name="shield" size={27} />
         </span>
         <span>
-          Legal<span className="brand-light">Check</span>
+          Claim<span className="brand-light">Wise</span>
         </span>
       </header>
       <main className="device-chooser">
@@ -44,7 +44,7 @@ export function DeviceChooser({
         </p>
       </main>
       <footer className="welcome-footer">
-        Legal Check · พื้นที่ปลอดภัยสำหรับสิทธิของคุณ
+        ClaimWise · พื้นที่ปลอดภัยสำหรับสิทธิของคุณ
       </footer>
     </div>
   );
